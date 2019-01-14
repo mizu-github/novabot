@@ -39,7 +39,7 @@ import java.util.*;
 public class Config {
 
     private static final String[] formatKeys = new String[]{"pokemon", "raidEgg", "raidBoss"};
-    private static final String[] formattingVars = new String[]{"title", "titleUrl", "body", "content","showThumbnail", "showMap", "mapZoom", "mapWidth", "mapHeight"};
+    private static final String[] formattingVars = new String[]{"title", "titleUrl", "body", "content","showThumbnail", "showColor", "showMap", "mapZoom", "mapWidth", "mapHeight"};
     private static final HashSet<String> filterTypes = new HashSet<>(Arrays.asList("atk", "def", "sta", "level", "iv", "cp"));
     private JsonObject globalFilter = null;
     private final HashMap<String, JsonObject> pokeFilters = new HashMap<>();
