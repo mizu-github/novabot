@@ -39,6 +39,7 @@ public class RaidSpawn extends Spawn {
     private int bossCp;
     private String imageUrl;
     private int lobbyCode;
+    public int form;
 
 
     public RaidSpawn(int id, boolean egg) {
@@ -50,7 +51,7 @@ public class RaidSpawn extends Spawn {
         }
     }
 
-    public RaidSpawn(String name, String gymId, double lat, double lon, Team team, ZonedDateTime raidEnd, ZonedDateTime battleStart, int bossId, int bossCp, int move_1, int move_2, int raidLevel) {
+    public RaidSpawn(String name, String gymId, double lat, double lon, Team team, ZonedDateTime raidEnd, ZonedDateTime battleStart, int bossId, int bossCp, int move_1, int move_2, int raidLevel/*, int form*/) {
         this.name = name;
         getProperties().put("gym_name", name);
 
@@ -89,6 +90,7 @@ public class RaidSpawn extends Spawn {
         this.bossCp = bossCp;
         this.setMove_1(move_1);
         this.setMove_2(move_2);
+        //this.form = form;
 
         if (bossId != 0) {
             getProperties().put("pkmn", Pokemon.getFilterName(bossId));
@@ -179,9 +181,25 @@ public class RaidSpawn extends Spawn {
                                 : "")));
             }
             embedBuilder.setTitle(novaBot.getConfig().formatStr(getProperties(), novaBot.getConfig().getTitleFormatting(formatFile, formatKey)), novaBot.getConfig().formatStr(getProperties(), novaBot.getConfig().getTitleUrl(formatFile, formatKey)));
-            embedBuilder.setThumbnail(getIcon());
+            //embedBuilder.setThumbnail(getIcon());
             if (novaBot.getConfig().showMap(formatFile, formatKey)) {
-                embedBuilder.setImage(getImage(formatFile));
+                int monId = bossId;
+                if (bossId == 0) {
+                    switch (raidLevel) {
+                        case 1:
+                        case 2:
+                            monId = 10001;
+                            break;
+                        case 3:
+                        case 4:
+                            monId = 10002;
+                            break;
+                        case 5:
+                            monId = 10003;
+                            break;
+                    }
+                }
+                embedBuilder.setImage(getImage(formatFile, monId, null));
             }
             embedBuilder.setFooter(novaBot.getConfig().getFooterText(), null);
             embedBuilder.setTimestamp(Instant.now());

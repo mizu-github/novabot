@@ -245,8 +245,8 @@ public class RaidLobby {
 
             embedBuilder.addField(StringLocalizer.getLocalString("StrongAgainst"), strengthEmoteStr.toString(), true);
 
-            embedBuilder.setThumbnail(spawn.getIcon());
-            embedBuilder.setImage(spawn.getImage(novaBot.getFormatting()));
+            //embedBuilder.setThumbnail(spawn.getIcon());
+            embedBuilder.setImage(spawn.getImage(novaBot.getFormatting(), spawn.bossId, null));
         }else{
             embedBuilder.setTitle(String.format("%s %s %s %s - %s %s",
                     StringLocalizer.getLocalString("StatusTitleEggStart"),
@@ -271,8 +271,8 @@ public class RaidLobby {
                     spawn.timeLeft(spawn.battleStart)),
                     false);
 
-            embedBuilder.setThumbnail(spawn.getIcon());
-            embedBuilder.setImage(spawn.getImage(novaBot.getFormatting()));
+            //embedBuilder.setThumbnail(spawn.getIcon());
+            embedBuilder.setImage(spawn.getImage(novaBot.getFormatting(), spawn.bossId, null));
         }
 
         MessageBuilder messageBuilder = new MessageBuilder().setEmbed(embedBuilder.build());

@@ -33,6 +33,7 @@ public class Spawn {
     protected final HashMap<String, Message> builtMessages = new HashMap<>();
     private Integer move_1;
     private Integer move_2;
+    private Integer form;
     protected double lat;
     protected double lon;
     protected String formatKey = "pokemon";
@@ -73,14 +74,26 @@ public class Spawn {
         return geofenceIdentifiers;
     }
 
-    public String getImage(String formatFile) {
+    public String getImage(String formatFile, final int id, Integer form) {
+
+        String monId = "";
+
         if (this.imageUrl == null) {
+            /*
             if(novaBot.getConfig().getStaticMapKeys().size() == 0){
                 return "https://raw.githubusercontent.com/novskey/novabot/dev/static/no-api-keys-remaining.png";
             }else {
                 incRequests();
                 return this.imageUrl = "https://maps.googleapis.com/maps/api/staticmap?" + String.format("zoom=%s&size=%sx%s&markers=color:red|%s,%s&key=%s", novaBot.getConfig().getMapZoom(formatFile, formatKey), novaBot.getConfig().getMapWidth(formatFile, formatKey), novaBot.getConfig().getMapHeight(formatFile, formatKey), this.lat, this.lon, getNextKey());
+            }*/
+            //return this.imageUrl = "https://dsmap98054.asuscomm.com:9940/staticmap.php?" + String.format("zoom=%s&size=%sx%s&markers=%s,%s,bullseye&center=%s,%s",novaBot.getConfig().getMapZoom(formatFile, formatKey),novaBot.getConfig().getMapWidth(formatFile, formatKey), novaBot.getConfig().getMapHeight(formatFile, formatKey), this.lat, this.lon, this.lat, this.lon)
+
+            if (form != null && form != 0 && id != 201 && id != 351){
+                monId = monId + id + "-" + form;
+            } else {
+                monId += id;
             }
+            return this.imageUrl = "http://54.39.147.153/staticpogomap.php?" + String.format("zoom=%s&size=%sx%s&markers=%s,%s,bullseye&center=%s,%s&mon=%s", novaBot.getConfig().getMapZoom(formatFile, formatKey), novaBot.getConfig().getMapWidth(formatFile, formatKey), novaBot.getConfig().getMapHeight(formatFile, formatKey), this.lat, this.lon, this.lat, this.lon, monId);
         }
         return this.imageUrl;
     }

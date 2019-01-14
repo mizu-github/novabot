@@ -159,13 +159,14 @@ public class Pokemon {
     }
 
     public static String getIcon(final int id, Integer form) {
-        String url = "https://bitbucket.org/anzmap/sprites/raw/HEAD/";
-        if (form != null && form != 0){
+        String url = "https://raw.githubusercontent.com/mizu-github/PogoAssets/sugimori/nova_256/";
+
+        if (form != null && form != 0 && id != 201 && id != 351){
             url = url +  id + "-" + form;
         } else {
             url += id;
         }
-        return url + ".png?4";
+        return url + ".png?5";
     }
 
     public Location getLocation() {

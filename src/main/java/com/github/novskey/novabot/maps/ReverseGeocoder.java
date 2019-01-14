@@ -56,6 +56,9 @@ public class ReverseGeocoder {
         location.set("sublocality","unkn");
         location.set("country","unkn");
 
+        return location;
+
+        /*
         String key = getNextKey();
         final GeoApiContext context = novaBot.getConfig().getGeoApis().get(key);
         try {
@@ -150,6 +153,7 @@ public class ReverseGeocoder {
         }
 
         return location;
+        */
     }
 
     private synchronized String getNextKey() {
