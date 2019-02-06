@@ -356,7 +356,8 @@ public class PokeSpawn extends Spawn
     }
 
     private String getIv() {
-        return PokeSpawn.df.format(this.iv);
+        //return PokeSpawn.df.format(this.iv);
+        return String.valueOf(Math.round(this.iv));
     }
 
     private String getSize() {
