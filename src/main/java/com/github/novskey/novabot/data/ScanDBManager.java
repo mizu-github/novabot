@@ -403,6 +403,7 @@ public class ScanDBManager  {
         }
 
         String sql = null;
+
         switch (scannerDb.getScannerType()) {
             case Monocle:
                 sql = "" +
@@ -449,7 +450,7 @@ public class ScanDBManager  {
                             "AND expire_timestamp > " +
                             (scannerDb.getProtocol().equals("mysql")
                              ? "UNIX_TIMESTAMP(now() - INTERVAL ? SECOND)"
-                             : "extract(epoch from now())")
+                             : "extract(epoch from now() + INTERVAL '%s' SECOND)")
                       + blacklistQuery;
                 break;
             case RocketMap:
@@ -549,6 +550,12 @@ public class ScanDBManager  {
                 break;
         }
 
+        if(scannerDb.getScannerType()==Hydro74000Monocle)
+        {
+            String sql_temp = sql;
+            sql = String.format(sql_temp, String.valueOf(novaBot.getConfig().getMinSecondsLeft()));
+        }
+
         int rows = 0;
         int newSpawns = 0;
         try (Connection connection = getScanConnection();
@@ -575,7 +582,8 @@ public class ScanDBManager  {
                     break;
             }
 
-            if (scannerDb.getProtocol().equals("mysql")) {
+            if (scannerDb.getProtocol().equals("mysql"))
+            {
                 statement.setString(offset,
                                     String.valueOf(novaBot.getConfig().getMinSecondsLeft()));
                 offset++;
