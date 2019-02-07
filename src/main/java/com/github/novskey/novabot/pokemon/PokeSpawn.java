@@ -203,6 +203,8 @@ public class PokeSpawn extends Spawn
 
             getProperties().put("time_left",timeLeft());
 
+            getProperties().put("min_left",minLeft());
+
             if (!getProperties().containsKey("city")) {
                 this.setGeocodedLocation(novaBot.reverseGeocoder.geocodedLocation(lat, lon));
                 getGeocodedLocation().getProperties().forEach(getProperties()::put);
@@ -387,4 +389,18 @@ public class PokeSpawn extends Spawn
 
         return time;
     }
+
+    private String minLeft() {
+        long diff = Duration.between(ZonedDateTime.now(UtilityFunctions.UTC), disappearTime).toMillis();
+
+        String time = String.format("%02dm",
+                                    MILLISECONDS.toMinutes(Math.abs(diff))
+                                   );
+
+        if (diff < 0) {
+            time = "-" + time;
+        }
+
+        return time;
+    }    
 }
