@@ -88,7 +88,7 @@ public class Config {
     private int dbThreads = 2;
     private int maxStoredMessages = 1000000;
     private int maxStoredHashes = 500000;
-    private NotificationLimit nonSupporterLimit = new NotificationLimit(null, null, null);
+    private NotificationLimit nonSupporterLimit = new NotificationLimit(0, 0, 0);
     private ArrayList<String> geocodingKeys = new ArrayList<>();
     private ArrayList<String> timeZoneKeys = new ArrayList<>();
     private ArrayList<String> staticMapKeys = new ArrayList<>();

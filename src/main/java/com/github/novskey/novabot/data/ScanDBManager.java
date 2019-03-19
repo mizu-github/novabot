@@ -222,6 +222,7 @@ public class ScanDBManager  {
                        : "extract(epoch from (?::timestamptz + INTERVAL '1' MINUTE))");
                 break;
             case Hydro74000Monocle:
+                /*
                 sql = "SELECT forts.name," +
                       " forts.id," +
                       " forts.lat," +
@@ -242,6 +243,30 @@ public class ScanDBManager  {
                       (scannerDb.getProtocol().equals("mysql")
                        ? "UNIX_TIMESTAMP(? + INTERVAL 1 MINUTE)"
                        : "extract(epoch from (?::timestamptz + INTERVAL '1' MINUTE))");
+                */
+                sql = "SELECT forts.name," +
+                      " forts.id," +
+                      " forts.lat," +
+                      " forts.lon," +
+                      " raids.team," +
+                      " raids.time_end AS END," +
+                      " raids.time_battle AS battle," +
+                      " raids.pokemon_id," +
+                      " raids.cp," +
+                      " raids.level," +
+                      " raids.move_1," +
+                      " raids.move_2," +
+                      " raids.form " +
+                      "FROM forts " +
+                      "INNER JOIN raids ON forts.id = raids.fort_id " +
+                      "WHERE raids.updated >= " +
+                      (scannerDb.getProtocol().equals("mysql")
+                       ? "UNIX_TIMESTAMP(? - INTERVAL 1 SECOND)"
+                       : "extract(epoch from (?::timestamptz - INTERVAL '1' SECOND)) ") + 
+                      "AND raids.time_end > " +
+                      (scannerDb.getProtocol().equals("mysql")
+                       ? "UNIX_TIMESTAMP(? + INTERVAL 1 MINUTE)"
+                       : "extract(epoch from (?::timestamptz + INTERVAL '1' MINUTE))");                
                 break;
             case PhilMap:
                 sql = "SELECT" +
@@ -269,13 +294,17 @@ public class ScanDBManager  {
         try (Connection connection = getScanConnection();
              PreparedStatement statement = connection.prepareStatement(sql)
         ) {
-            for (int i = 0; i < knownRaids.size(); i++) {
-                if (scannerDb.getProtocol().equals("mysql")) {
-                    statement.setString(i + 1, knownIds.get(i));
-                } else {
-                    statement.setInt(i + 1, Integer.parseInt(knownIds.get(i)));
+            if(scannerDb.getScannerType()!=Hydro74000Monocle)
+            {
+                for (int i = 0; i < knownRaids.size(); i++) {
+                    if (scannerDb.getProtocol().equals("mysql")) {
+                        statement.setString(i + 1, knownIds.get(i));
+                    } else {
+                        statement.setInt(i + 1, Integer.parseInt(knownIds.get(i)));
+                    }
                 }
             }
+
             switch (scannerDb.getScannerType()) {
                 case RocketMap:
                 case SkoodatRocketMap:
@@ -284,11 +313,17 @@ public class ScanDBManager  {
                     statement.setObject(knownRaids.size() + 1, lastCheckedRaids.toLocalDateTime(), Types.TIMESTAMP);
                     break;
                 case Monocle:
-                case Hydro74000Monocle:
                     LocalDateTime localDateTime = lastCheckedRaids.withZoneSameInstant(novaBot.getConfig().getTimeZone()).toLocalDateTime();
                     String timeStamp = String.format("%s %s", localDateTime.toLocalDate(), localDateTime.toLocalTime());
 
                     statement.setString(knownRaids.size() + 1, timeStamp);
+                    break;
+                case Hydro74000Monocle:
+                    LocalDateTime localDateTimeHydro = lastCheckedRaids.withZoneSameInstant(novaBot.getConfig().getTimeZone()).toLocalDateTime();
+                    String timeStampHydro = String.format("%s %s", localDateTimeHydro.toLocalDate(), localDateTimeHydro.toLocalTime());
+
+                    statement.setString(1, timeStampHydro);
+                    statement.setString(2, timeStampHydro);
                     break;
             }
 
