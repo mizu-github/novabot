@@ -39,7 +39,8 @@ public class RaidSpawn extends Spawn {
     private int bossCp;
     private String imageUrl;
     private int lobbyCode;
-    public int form;
+    public String form;
+    public Integer formId;
 
 
     public RaidSpawn(int id, boolean egg) {
@@ -51,7 +52,8 @@ public class RaidSpawn extends Spawn {
         }
     }
 
-    public RaidSpawn(String name, String gymId, double lat, double lon, Team team, ZonedDateTime raidEnd, ZonedDateTime battleStart, int bossId, int bossCp, int move_1, int move_2, int raidLevel/*, int form*/) {
+    // RaidSpawn for HydroMoncle
+    public RaidSpawn(String name, String gymId, double lat, double lon, Team team, ZonedDateTime raidEnd, ZonedDateTime battleStart, int bossId, int bossCp, int move_1, int move_2, int raidLevel, Integer form) {
         this.name = name;
         getProperties().put("gym_name", name);
 
@@ -90,7 +92,8 @@ public class RaidSpawn extends Spawn {
         this.bossCp = bossCp;
         this.setMove_1(move_1);
         this.setMove_2(move_2);
-        //this.form = form;
+        this.form = null;
+        this.formId = form;
 
         if (bossId != 0) {
             getProperties().put("pkmn", Pokemon.getFilterName(bossId));
@@ -101,6 +104,11 @@ public class RaidSpawn extends Spawn {
             getProperties().put("quick_move_type_icon",(move_1 == 0) ? "unkn" : Types.getEmote(Pokemon.getMoveType(move_1)));
             getProperties().put("charge_move", (move_2 == 0) ? "unkn" : Pokemon.moveName(move_2));
             getProperties().put("charge_move_type_icon",(move_2 == 0) ? "unkn" : Types.getEmote(Pokemon.getMoveType(move_2)));
+            if (form != null && form != 0) {
+                this.form = ((Pokemon.formToString(bossId,form) == null) ? null : String.valueOf(Pokemon.formToString(bossId,form)));
+            }
+            getProperties().put("form", (this.form == null ? "" : this.form));
+
         }
 
         this.raidLevel = raidLevel;
@@ -199,7 +207,7 @@ public class RaidSpawn extends Spawn {
                             break;
                     }
                 }
-                embedBuilder.setImage(getImage(formatFile, monId, null));
+                embedBuilder.setImage(getImage(formatFile, monId, formId));
             }
             embedBuilder.setFooter(novaBot.getConfig().getFooterText(), null);
             embedBuilder.setTimestamp(Instant.now());

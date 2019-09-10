@@ -93,7 +93,7 @@ public class Spawn {
             } else {
                 monId += id;
             }
-            return this.imageUrl = "http://54.39.147.153/staticpogomap.php?" + String.format("zoom=%s&size=%sx%s&markers=%s,%s,bullseye&center=%s,%s&mon=%s", novaBot.getConfig().getMapZoom(formatFile, formatKey), novaBot.getConfig().getMapWidth(formatFile, formatKey), novaBot.getConfig().getMapHeight(formatFile, formatKey), this.lat, this.lon, this.lat, this.lon, monId);
+            return this.imageUrl = "https://staticmap.dsmpokemap.com/staticpogomap.php?" + String.format("zoom=%s&size=%sx%s&markers=%s,%s,bullseye&center=%s,%s&mon=%s", novaBot.getConfig().getMapZoom(formatFile, formatKey), novaBot.getConfig().getMapWidth(formatFile, formatKey), novaBot.getConfig().getMapHeight(formatFile, formatKey), this.lat, this.lon, this.lat, this.lon, monId);
         }
         return this.imageUrl;
     }
